@@ -2,20 +2,33 @@
 
 Class Province
 {
-	public $province;
+	public $code;
+	public $name;
 
-	public function __construct(String $province = '')
+	public function __construct(String $code = '', String $name = '')
 	{
-		$this->province = $province;
+		$this->setCode($code);
+		$this->setName($name);
 	}
 
-	public static function getProvinceListByXPath($body)
+	public setCode(String $code)
 	{
-		$province_list = [];
+		$this->code = $code;
+	}
 
-		// XPath e DOMContent ... 
+	public setName(String $name)
+	{
+		$this->name = $name;
+	}
 
-		return $province_list;
+	public getCode()
+	{
+		return $this->code;
+	}
+
+	public getName()
+	{
+		return $this->name;
 	}
 }
 
