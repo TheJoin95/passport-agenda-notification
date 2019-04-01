@@ -9,12 +9,8 @@ Class Availability
 		$this->availabilities = $availabilities;
 	}
 
-	public static function getAvailabilitiesByXPath($body) {
-		$availabilities_list = [];
-
-		// Xpath
-
-		return $availabilities_list;
+	public static function getAvailabilities($body) {
+		return $this->availabilities;
 	}
 }
 

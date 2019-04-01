@@ -22,12 +22,26 @@ Class Availability
 		$this->port = $port;
 	}
 
+	private function getAvailabilities (String $response)
+	{
+		$availabilities = array();
+		$availability_date = date('Y-m-d');
+
+		if(preg_match('/\d+\/\d+\/\d+/', $response, $match) === 1)
+			$availability_date = $match[0];
+
+		// recuperare le strutture con link relativo e tot disponibilità
+
+		return $availabilities;
+	}
+
 	public function getFromProvinceCode(Province $province)
 	{
 		$r = new Request();
 
 		$r->setOpt(CURLOPT_URL, $this->endpoint);
 		$r->setOpt(CURLOPT_PORT, $this->port);
+		$r->setRequestHeaders(array('Cookie' => "JSESSIONID={$_SESSION['jid']}"));
 		$r->setOpt(CURLOPT_POSTFIELDS, array(
 				'provincia' => $province->getCode(),
 				'codop' => 'getDisponibilitaCittadino',
@@ -38,8 +52,10 @@ Class Availability
 		$r->exec();
 
 		$response = $r->getResponse();
-		// preg_match_all('/pattern/', $response, $matches);
-		return new Availability($matches[1][0]);
+
+		$availabilities = $this->getAvailabilities($response);
+
+		return (new Availability($availabilities))->getAvailabilities();
 	}
 }
 
