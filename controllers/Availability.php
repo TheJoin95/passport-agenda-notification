@@ -31,6 +31,8 @@ Class Availability
 		$availabilities = array();
 		$availability_date = date('Y-m-d');
 
+		file_put_contents('./availability.html', $response);
+
 		if(preg_match('/\d+\/\d+\/\d+/', $response, $match) === 1)
 			$availability_date = $match[0];
 
@@ -64,16 +66,17 @@ Class Availability
 		$r->setOpt(CURLOPT_URL, $this->endpoint);
 		$r->setOpt(CURLOPT_PORT, $this->port);
 		$r->setRequestHeaders(array('Cookie' => "JSESSIONID={$_SESSION['jid']}"));
-		$r->setOpt(CURLOPT_POSTFIELDS, array(
+		/*$r->setOpt(CURLOPT_POSTFIELDS, array(
 				'provincia' => $province->getCode(),
 				'codop' => 'getDisponibilitaCittadino',
 				'x' => 17,
 				'y' => 17
 			)
-		);
+		);*/
 		$r->exec();
 
 		$response = $r->getResponse();
+		var_dump($response); die();
 
 		$availabilities = $this->getAvailabilities($response);
 

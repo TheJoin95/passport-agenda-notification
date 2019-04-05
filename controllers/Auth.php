@@ -47,7 +47,7 @@ Class Auth
 
 	private function setSession($id)
 	{
-		$_SESSION['jid'] = $id;
+		$_SESSION['jid'] = urlencode($id);
 	}
 
 }
