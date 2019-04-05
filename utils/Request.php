@@ -13,7 +13,6 @@ class Request {
 		CURLOPT_POST => 1,
 		CURLOPT_SSL_VERIFYPEER => 1,
 		CURLOPT_RETURNTRANSFER => 1,
-		# curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: text/xml","SOAPAction: \"/soap/action/query\"", "Content-length: ".strlen($data))); 
 	];
 
 	public function __construct(Array $opt = [])
@@ -54,7 +53,6 @@ class Request {
 			$formattedHeaders[] = $key.": ".$value;
 		}
 
-		var_dump($formattedHeaders);
 		$this->setOpt(CURLOPT_HTTPHEADER, $formattedHeaders);
 	}
 

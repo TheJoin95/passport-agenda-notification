@@ -31,13 +31,11 @@ Class Dashboard
 
 	public function getProvince()
 	{
+		file_put_contents('./test.html', $this->index_page);
 		$result = array();
 		preg_match_all('/<option value="(\w+)">(.+)<\/option>/', $this->index_page, $matches);
 		if(!empty($matches[1][0])) {
-			// new Province($matches[1][0], $matches[2][0]);
-			$result = array(
-				$matches[1][0] => $matches[2][0]
-			);
+			$result[] = new Province($matches[1][0], $matches[2][0]);
 		}
 
 		return $result;

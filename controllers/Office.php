@@ -1,6 +1,6 @@
 <?php
 
-CLass Offices
+CLass Office
 {
 	
 }

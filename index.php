@@ -1,41 +1,42 @@
 <?php
 
-require_once(dirname(__FILE__) . '/enviroment/config.inc.php');
+require_once(dirname(__FILE__) . '/environment/config.inc.php');
 require_once(dirname(__FILE__) . '/controllers/Auth.php');
 require_once(dirname(__FILE__) . '/controllers/Dashboard.php');
 require_once(dirname(__FILE__) . '/controllers/Availability.php');
 
 require_once(dirname(__FILE__) . '/models/Credential.php');
+require_once(dirname(__FILE__) . '/models/Province.php');
+require_once(dirname(__FILE__) . '/models/Slot.php');
 
 require_once(dirname(__FILE__) . '/utils/Request.php');
 
-$dataLogin = array(
-	'codiceFiscale' => '',
-	'codop' => 'logCittadino',
-	'password' => ''
-);
-
-$dataSearch = array(
-	'provincia' => 'FI',
-	'x' => 17,
-	'y' => 17
-);
-
 $passportAuth = new Auth(BASE_URL.ENDPOINT['login'], 443);
-$result = $passportAuth->authenticate(new Credential('xxxxx', 'yyyy'));
+$isLoggedIn = $passportAuth->authenticate(new Credential('xxxxx', 'yyyyy'));
 
-$dashboard = new Dashboard(BASE_URL.ENDPOINT['dashboard'], 443);
-$province = $dashboard->getProvince();
+var_dump($_SESSION);
 
-if(empty($province))
-	throw new Exception("Check your login", 1);
-	
-die("da fare");
-$availability_list = (new Availability())->getFromProvinceCode($province[0]);
+if($isLoggedIn)
+{
+	$dashboard = new Dashboard(BASE_URL.ENDPOINT['dashboard'], 443);
+	$province = $dashboard->getProvince();
+
+	if(empty($province))
+		throw new Exception("Check your login", 1);
+}
+else
+{
+	throw new Exception("Bad login", 1);
+}
+
+
+$availabilityRequest = new Availability(ENDPOINT['availability_list'], 443);
+$availabilities = $availabilityRequest->getFromProvinceCode($province[0]);
+
+var_dump($availabilities);
 
 // 'Set-Cookie' => "JSESSIONID={$_SESSION['jid']}"
 
-var_dump($result);
 die("fine");
 
 $r = new Request();

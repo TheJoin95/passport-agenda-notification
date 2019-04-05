@@ -11,22 +11,22 @@ Class Province
 		$this->setName($name);
 	}
 
-	public setCode(String $code)
+	public function setCode(String $code)
 	{
 		$this->code = $code;
 	}
 
-	public setName(String $name)
+	public function setName(String $name)
 	{
 		$this->name = $name;
 	}
 
-	public getCode()
+	public function getCode()
 	{
 		return $this->code;
 	}
 
-	public getName()
+	public function getName()
 	{
 		return $this->name;
 	}

@@ -3,8 +3,8 @@
 Class Availability
 {
 
-	private $endpoint = ENDPOINT['availability_list'];
-	private $port = 443;
+	private $endpoint;
+	private $port;
 
 	// GestioneDisponibilitaAction.do?codop=getDisponibilitaCittadino&amp;previous=false&amp;data=05-04-2019
 	private $pagination_string = "/GestioneDisponibilitaAction.do?codop=getDisponibilitaCittadino&previous=@PREVIOUS@&data=@DATA@";
@@ -77,7 +77,7 @@ Class Availability
 
 		$availabilities = $this->getAvailabilities($response);
 
-		return (new Availability($availabilities))->getAvailabilities();
+		return (new Slot($availabilities))->getAvailabilities();
 	}
 }
 
