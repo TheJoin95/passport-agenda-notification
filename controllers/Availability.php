@@ -8,7 +8,8 @@ Class Availability
 
 	// GestioneDisponibilitaAction.do?codop=getDisponibilitaCittadino&amp;previous=false&amp;data=05-04-2019
 	private $pagination_string = "/GestioneDisponibilitaAction.do?codop=getDisponibilitaCittadino&previous=@PREVIOUS@&data=@DATA@";
-	private $regexp_list = '/headers="(\w+)">|href="([A-Za-z.?=&;0-9-]+)"|>([\sA-Za-z]+)<\/a>|([\w+,\s\/\d-]+)<|>(\d+)<\/td>/';
+	// private $regexp_list = '/headers="(\w+)">|href="([A-Za-z.?=&;0-9-]+)"|>([\sA-Za-z]+)<\/a>|([\w+,\s\/\d-]+)<|>(\d+)<\/td>/';
+	private $regexp_list = '/headers="descrizione"><ahref="([A-Za-z.?=&;0-9-]+)"|title="Disponibilita">([\sA-Za-z]+)<\/a>| headers="indirizzo">([\w+,\s\/\d-]+)<|>(\d+)<\/td>/';
 
 	public function __construct(String $endpoint, String $port)
 	{
@@ -31,30 +32,41 @@ Class Availability
 		$availabilities = array();
 		$availability_date = date('Y-m-d');
 
-		file_put_contents('./availability.html', $response);
+		file_put_contents('./availability.html', str_replace(array("\n","\r", "\t"), '', $response));
 
-		if(preg_match('/\d+\/\d+\/\d+/', $response, $match) === 1)
+		if(preg_match('/(\d+\/\d+\/\d+)|(\d+\-\d+\-\d+)/', $response, $match) === 1)
 			$availability_date = $match[0];
 
-		if(!empty($availability_list))
+		if(!empty($match))
 		{
 			// 0 => field, 1 => link disponibilità, 2 => sede name, 3 => address, 4 => n. civico
 			if(preg_match_all($this->regexp_list, str_replace(array("\n","\r", "\t"), '', $response), $matches))
 			{
-				for($i = 0; $i < count($matches); $i++)
+				$tmpArray = array();
+				$matchGroup = 0;
+				for($i = 1; $i < count($matches); $i++)
 				{
-					$availabilities[] = array(
-						'link' => $matches[$i][1],
-						'office' => array(
-							'name' => $matches[$i][2],
-							'address' => $matches[$i][3] . ' ' . $matches[$i][4]
-						)
-					);
+					if($i % 4 == 0)
+					{
+						$availabilities[] = array(
+							'link' => $tmpArray[0],
+							'availability' => $tmpArray[3],
+							'office' => array(
+								'name' => $tmpArray[1],
+								'address' => $tmpArray[2]
+							)
+						);
+						$matchGroup = 0;
+						$tmpArray = array();
+					}
+					else
+					{
+						$tmpArray[] = $matches[$i][$matchGroup];
+						$matchGroup++;
+					}
 				}
 			}
 		}
-
-		// recuperare le strutture con link relativo e tot disponibilità
 
 		return $availabilities;
 	}
@@ -76,7 +88,6 @@ Class Availability
 		$r->exec();
 
 		$response = $r->getResponse();
-		var_dump($response); die();
 
 		$availabilities = $this->getAvailabilities($response);
 
