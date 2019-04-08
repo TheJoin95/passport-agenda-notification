@@ -11,8 +11,17 @@ require_once(dirname(__FILE__) . '/models/Slot.php');
 
 require_once(dirname(__FILE__) . '/utils/Request.php');
 
-$passportAuth = new Auth(BASE_URL.ENDPOINT['login'], 443);
-$isLoggedIn = $passportAuth->authenticate(new Credential('xxxxx', 'yyyyy'));
+if(file_exists(CREDENTIAL_FILE) && defined('CREDENTIAL_FILE'))
+{
+	$credential = json_decode(file_get_contents(CREDENTIAL_FILE), true);
+
+	$passportAuth = new Auth(BASE_URL.ENDPOINT['login'], 443);
+	$isLoggedIn = $passportAuth->authenticate(new Credential($credential['username'], $credential['password']));
+}
+else
+{
+	throw new Exception("Invalid credentail file", 1);
+}
 
 if($isLoggedIn)
 {

@@ -10,4 +10,6 @@ const ENDPOINT = [
 	"calendar_slots" => "/dwr/call/plainpoll/ReverseAjax.dwr"
 ];
 
+define('CREDENTIAL_FILE', dirname(__FILE__).'/credential.json');
+
 ?>
