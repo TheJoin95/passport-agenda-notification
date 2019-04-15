@@ -44,7 +44,9 @@ if(empty($availabilities))
 	echo "Non ci sono disponibilità\n";
 }else{
 	print_r($availabilities);
-	// sendPush or sendEmail
+	echo "Ci sono " . count($availabilities) . " disponibilità\n";
+	$sparkpostWrapper = new Sparkpost(SPARKPOST_KEY);
+	$sparkpostWrapper->sendEmail(NOTIFY_EMAIL, 'Agenda passaporto - Nuove disponibilità', 'Si');
 }
 
 ?>

@@ -10,6 +10,9 @@ const ENDPOINT = [
 	"calendar_slots" => "/dwr/call/plainpoll/ReverseAjax.dwr"
 ];
 
+define('SPARKPOST_KEY', 'xxxxx');
+define('NOTIFY_ADDRESS', 'yyyy@xxxx.xyz');
+
 define('CREDENTIAL_FILE', dirname(__FILE__).'/credential.json');
 
 ?>
