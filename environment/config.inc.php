@@ -1,5 +1,6 @@
 <?php
 
+// Configuration
 const BASE_URL = "https://www.passaportonline.poliziadistato.it";
 const ENDPOINT = [
 	"login" => "/LogInAction.do?codop=logCittadino",
@@ -10,6 +11,7 @@ const ENDPOINT = [
 	"calendar_slots" => "/dwr/call/plainpoll/ReverseAjax.dwr"
 ];
 
+// Replace here your credential and email
 define('SPARKPOST_KEY', 'xxxxx');
 define('NOTIFY_ADDRESS', 'yyyy@xxxx.xyz');
 

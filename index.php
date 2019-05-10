@@ -10,6 +10,7 @@ require_once(dirname(__FILE__) . '/models/Province.php');
 require_once(dirname(__FILE__) . '/models/Slot.php');
 
 require_once(dirname(__FILE__) . '/utils/Request.php');
+require_once(dirname(__FILE__) . '/utils/Sparkpost.php');
 
 if(file_exists(CREDENTIAL_FILE) && defined('CREDENTIAL_FILE'))
 {
@@ -20,7 +21,7 @@ if(file_exists(CREDENTIAL_FILE) && defined('CREDENTIAL_FILE'))
 }
 else
 {
-	throw new Exception("Invalid credentail file", 1);
+	throw new Exception("Invalid credential file", 1);
 }
 
 if($isLoggedIn)
@@ -43,10 +44,14 @@ if(empty($availabilities))
 {
 	echo "Non ci sono disponibilità\n";
 }else{
-	print_r($availabilities);
-	echo "Ci sono " . count($availabilities) . " disponibilità\n";
-	$sparkpostWrapper = new Sparkpost(SPARKPOST_KEY);
-	$sparkpostWrapper->sendEmail(NOTIFY_EMAIL, 'Agenda passaporto - Nuove disponibilità', 'Si');
+	$emailHTML = require_once(dirname(__FILE__) . '/email/notification.php');
+	echo strip_tags($emailHTML);
+
+	if(defined('NOTIFY_ADDRESS'))
+	{
+		$sparkpostWrapper = new Sparkpost(SPARKPOST_KEY);
+		$sparkpostWrapper->sendEmail(NOTIFY_ADDRESS, 'Agenda passaporto - Nuove disponibilità', $emailHTML);
+	}
 }
 
 ?>

@@ -1,5 +1,11 @@
 <?php
 
+/**
+* @Sparkpost
+* @description
+* Simple class to use the Sparkpost lib
+*/
+
 Class Sparkpost
 {
 
@@ -41,6 +47,8 @@ Class Sparkpost
 				)
 			)
 		);
+
+		$r->exec();
 	}
 }
 

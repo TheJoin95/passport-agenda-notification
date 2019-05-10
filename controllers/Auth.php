@@ -1,5 +1,14 @@
 <?php
 
+/**
+*
+* @Auth
+*
+* @Description
+* This class manage the auth and the session of the application
+* 
+*/
+
 Class Auth
 {
 	private $endpoint;
@@ -21,6 +30,11 @@ Class Auth
 		$this->port = $port;
 	}
 
+	/**
+	* @authenticate
+	* @param Credential - username and password
+	* @return bool - true stand for signed in
+	*/
 	public function authenticate(Credential $credential)
 	{
 		$r = new Request();
@@ -37,6 +51,12 @@ Class Auth
 		return $this->isSignedIn($r->getResponse(), $r->getResponseCookie());
 	}
 
+	/**
+	* @isSignedIn
+	* @param html - string - html response of the signin request
+	* @param headers - array - the response headers of the request
+	* @return bool
+	*/
 	private function isSignedIn($html, $headers)
 	{
 		$signedIn = (preg_match('/errorLoginCittadino/', $html) === 0);
@@ -45,6 +65,11 @@ Class Auth
 		return $signedIn;
 	}
 
+	/**
+	* @setSession
+	* @param $id - string - session id
+	* @return void
+	*/
 	private function setSession($id)
 	{
 		$_SESSION['jid'] = urlencode($id);

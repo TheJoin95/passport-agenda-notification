@@ -1,5 +1,12 @@
 <?php
 
+/**
+* @Request
+* @description
+* This class is a wrapper to use the curl lib
+* 
+*/
+
 class Request {
 	private $ch;
 	private $response;
@@ -21,18 +28,27 @@ class Request {
 		$this->setDefaultOpt($opt);
 	}
 
+	/**
+	* Run the request
+	*/
 	public function exec()
 	{
 		$this->response = curl_exec($this->ch);
 		$this->setRequestInfo();
 	}
 
+	/**
+	* Get and Set the request info of curl
+	*/
 	private function setRequestInfo()
 	{
 		$this->headers = substr($this->response, 0, curl_getinfo($this->ch, CURLINFO_HEADER_SIZE));
 		$this->httpCode = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
 	}
 
+	/**
+	* Get the cookie from the response of the curl request
+	*/
 	public function getResponseCookie()
 	{
 		preg_match_all('/^Set-Cookie:\s*([^ \r\n;]*)/mi', $this->response, $matches);
@@ -45,6 +61,9 @@ class Request {
 		return $cookies;
 	}
 
+	/**
+	* Set the request headers
+	*/
 	public function setRequestHeaders(Array $headers)
 	{
 		$formattedHeaders = array();
@@ -56,11 +75,13 @@ class Request {
 		$this->setOpt(CURLOPT_HTTPHEADER, $formattedHeaders);
 	}
 
+	// Set the option for the curl
 	public function setOpt($opt, $value)
 	{
 		curl_setopt($this->ch, $opt, $value);
 	}
 
+	// Set the default option for the curl
 	private function setDefaultOpt(Array $options)
 	{
 		$options = empty($options) ? $this->default_opt : $options;
@@ -90,6 +111,7 @@ class Request {
 		return $this->response_html;
 	}
 
+	// Parse the response to a DOMDocument
 	public function setResponseHTML()
 	{
 		$this->response_html = new DOMDocument();

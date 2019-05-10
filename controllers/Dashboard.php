@@ -1,5 +1,13 @@
 <?php
 
+/**
+* @Dashboard
+* @description 
+* This class manage the first page after the login.
+* This class is where the province is setted.
+* 
+*/
+
 Class Dashboard
 {
 	public $index_page;
@@ -28,10 +36,13 @@ Class Dashboard
 		$this->port = $port;
 	}
 
-
+	/**
+	 * @getProvince
+	 * @description - Get from the index_page property the province values
+	 * @return Array of Province
+	*/
 	public function getProvince()
 	{
-		file_put_contents('./test.html', $this->index_page);
 		$result = array();
 		preg_match_all('/<option value="(\w+)">(.+)<\/option>/', $this->index_page, $matches);
 		if(!empty($matches[1][0])) {
